@@ -46,6 +46,9 @@ type GetVideosParams struct {
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
+	// Ping
+	// (GET /ping)
+	Ping(ctx echo.Context) error
 	// Get videos
 	// (GET /videos)
 	GetVideos(ctx echo.Context, params GetVideosParams) error
@@ -54,6 +57,15 @@ type ServerInterface interface {
 // ServerInterfaceWrapper converts echo contexts to parameters.
 type ServerInterfaceWrapper struct {
 	Handler ServerInterface
+}
+
+// Ping converts echo context to params.
+func (w *ServerInterfaceWrapper) Ping(ctx echo.Context) error {
+	var err error
+
+	// Invoke the callback with all the unmarshaled arguments
+	err = w.Handler.Ping(ctx)
+	return err
 }
 
 // GetVideos converts echo context to params.
@@ -123,6 +135,7 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 		Handler: si,
 	}
 
+	router.GET(baseURL+"/ping", wrapper.Ping)
 	router.GET(baseURL+"/videos", wrapper.GetVideos)
 
 }

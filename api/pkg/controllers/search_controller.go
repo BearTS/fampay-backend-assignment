@@ -18,3 +18,7 @@ func (s *ApiSvc) GetVideos(ctx echo.Context, params routes.GetVideosParams) erro
 	}
 	return ctx.JSON(status, response)
 }
+
+func (svc *ApiSvc) Ping(ctx echo.Context) error {
+	return ctx.String(200, "pong")
+}

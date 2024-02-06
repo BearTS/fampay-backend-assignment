@@ -12,6 +12,22 @@ servers:
   - url: http://localhost:3000/v1
     description: Local development server
 paths:
+  /ping:
+    get:
+      summary: Ping
+      operationId: ping
+      description: Ping the server
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Pong
   /videos:
     get:
       summary: Get videos
