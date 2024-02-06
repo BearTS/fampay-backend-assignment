@@ -1,6 +1,9 @@
 version: '3'
 
 tasks:
+  build:
+    cmds:
+      - go build -o bin/api main.go
   gen:
     dir: ./api/pkg/routes/
     cmds:
@@ -9,4 +12,10 @@ tasks:
     cmds:
       - go run main.go api
     env:
-      PORT: 4000
+      PORT: 3000
+  fetch:
+    cmds:
+      - go run main.go youtube-fetcher
+  migrate:
+    cmds:
+      - go run main.go migrate  

@@ -13,3 +13,78 @@ services:
       POSTGRES_DB: fampay
     networks:
       - default
+
+  api:
+    container_name: api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    entrypoint:
+      - /app/main
+      - api
+    # env_file:
+    #   - .env
+    ports:
+      - "3000:3000"
+    depends_on:
+      - psql
+      - migrate
+    environment:
+      - ENVIRONMENT=local
+      - PORT=3000
+      - POSTGRES_HOST=psql
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASS=postgres
+      - POSTGRES_DB=fampay
+    networks:
+      - default
+
+  migrate:
+    container_name: migrate
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: "no"
+    entrypoint:
+      - /app/main
+      - dbapp
+      - migrate
+    depends_on:
+      - psql
+    environment:
+      - ENVIRONMENT=local
+      - POSTGRES_HOST=psql
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASS=postgres
+      - POSTGRES_DB=fampay
+    networks:
+      - default
+      
+  youtube-fetcher:
+    container_name: youtube-fetcher
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    entrypoint:
+      - /app/main
+      - youtube-fetcher
+    environment:
+      - ENVIRONMENT=local
+      - YOUTUBE_API_KEYS=apiKey1,apiKey2
+      - YOUTUBE_FETCH_INTERVAL=10
+      - YOUTUBE_QUERY=cricket
+      - POSTGRES_HOST=psql
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASS=postgres
+      - POSTGRES_DB=fampay
+    depends_on:
+      - psql
+      - migrate
+    networks:
+      - default
+  
