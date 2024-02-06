@@ -38,7 +38,6 @@ func NewYoutubeClient(apiKey []string) *Youtube {
 	}
 }
 
-// TODO: Upon a ratelimit error call a function which changes the api key
 func (svc *Youtube) changeApiKey() error {
 	if svc.currentIndexOfApiKey == len(svc.ApiKey)-1 {
 		svc.currentIndexOfApiKey = 0

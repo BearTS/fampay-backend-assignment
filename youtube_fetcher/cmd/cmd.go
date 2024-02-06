@@ -26,6 +26,7 @@ func RootCmd() *cobra.Command {
 			youtubeSvc := youtube.NewYoutubeClient(apiKey)
 			timeafter := time.Now().AddDate(0, -1, 0)
 
+			videosMap := make(map[string]bool)
 			// Fetch the data from youtube
 			fetch := func() {
 				fmt.Println("Fetching data from youtube")
@@ -45,12 +46,22 @@ func RootCmd() *cobra.Command {
 					timeParsed, _ := time.Parse(time.RFC3339, video.Snippet.PublishedAt)
 					dbVideo.PublishedAt = timeParsed
 
-					// TODO: make sure that duplicate videos are not added
+					if videosMap[dbVideo.VideoId] {
+						continue
+					}
+
+					videosMap[dbVideo.VideoId] = true
+
 					dbVideos = append(dbVideos, &dbVideo)
 				}
 
 				// Save the data to the database
-				err = database.CreateVideosBulk(dbVideos)
+				if len(dbVideos) > 0 {
+					err = database.CreateVideosBulk(dbVideos)
+					if err != nil {
+						logrus.Error("Error saving videos to the database: ", err)
+					}
+				}
 			}
 
 			fetch()

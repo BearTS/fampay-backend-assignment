@@ -15,7 +15,6 @@ type Videos struct {
 	Description  string    `gorm:"column:description;type:text"`
 	Thumbnail    string    `gorm:"column:thumbnail;type:text"`
 	ChannelTitle string    `gorm:"column:channel_title;type:text"`
-	VideoUrl     string    `gorm:"column:video_url;type:text"`
 	PublishedAt  time.Time `gorm:"column:published_at;not null;type:timestamp"`
 }
 
@@ -31,7 +30,7 @@ func (db *db) GetAllVideosPaginated(offset int, limit int, title *string, descri
 	var videos []*Videos
 	query := db.gormDB
 
-	// TODO: Better way to do this
+	// TODO: Think of a better way to do this
 	if title != nil {
 		arrayOfString := strings.Split(*title, " ")
 		for _, word := range arrayOfString {
