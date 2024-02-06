@@ -44,7 +44,7 @@ func (db *db) GetAllVideosPaginated(offset int, limit int, title *string, descri
 			query = query.Where("description LIKE ?", "%"+word+"%")
 		}
 	}
-	err := query.Offset(offset).Limit(limit).Find(&videos).Error
+	err := query.Offset(offset).Limit(limit).Order("published_at DESC").Find(&videos).Error
 	return videos, err
 }
 
