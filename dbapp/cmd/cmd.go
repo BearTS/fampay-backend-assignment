@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var DbAppsCmd = &cobra.Command{
+var RootCmd = &cobra.Command{
 	Use:   "dbapp",
 	Short: "run different db operations",
 	Run: func(cmd *cobra.Command, args []string) {
@@ -17,5 +17,5 @@ var DbAppsCmd = &cobra.Command{
 }
 
 func init() {
-	DbAppsCmd.AddCommand(Migrate())
+	RootCmd.AddCommand(Migrate())
 }

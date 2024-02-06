@@ -1,6 +1,6 @@
 module github.com/BearTS/fampay-backend-assignment
 
-go 1.20
+go 1.21
 
 require (
 	github.com/deepmap/oapi-codegen v1.16.2
@@ -10,6 +10,8 @@ require (
 	github.com/spf13/cobra v1.8.0
 	golang.org/x/sync v0.6.0
 	google.golang.org/api v0.162.0
+	gorm.io/driver/postgres v1.5.4
+	gorm.io/gorm v1.25.5
 )
 
 require (
@@ -45,6 +47,7 @@ require (
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mohae/deepcopy v0.0.0-20170929034955-c48cc78d4826 // indirect
 	github.com/perimeterx/marshmallow v1.1.4 // indirect
+	github.com/rogpeppe/go-internal v1.12.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.2 // indirect
@@ -67,7 +70,5 @@ require (
 	google.golang.org/protobuf v1.32.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
-	gorm.io/driver/postgres v1.5.5 // indirect
-	gorm.io/gorm v1.25.6 // indirect
 	olympos.io/encoding/edn v0.0.0-20201019073823-d3554ca0b0a3 // indirect
 )
