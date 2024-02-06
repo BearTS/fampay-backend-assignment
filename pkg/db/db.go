@@ -12,6 +12,8 @@ type DB interface {
 
 	/* --------------------------------- Videos --------------------------------- */
 	CreateVideosBulk(videos []*Videos) error
+	GetAllVideosCount() (int64, error)
+	GetAllVideosPaginated(offset int, limit int, title *string, description *string) ([]*Videos, error)
 }
 
 // NewDB creates a new DB object.

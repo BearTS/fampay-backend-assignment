@@ -11,7 +11,9 @@ import (
 	"time"
 
 	api "github.com/BearTS/fampay-backend-assignment/api/pkg/controllers"
+	"github.com/BearTS/fampay-backend-assignment/api/pkg/services/searchsvc"
 	"github.com/BearTS/fampay-backend-assignment/pkg/config"
+	"github.com/BearTS/fampay-backend-assignment/pkg/db"
 	"github.com/sirupsen/logrus"
 
 	"github.com/spf13/cobra"
@@ -31,8 +33,15 @@ func RootCmd() *cobra.Command {
 		Short: "serves the api",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx, cancel := context.WithCancel(context.Background())
+			gormDB, _ := db.Connection()
+			database := db.NewDB(gormDB)
 
-			svc, err := api.NewService(ctx, opts)
+			var deps api.Dependencies
+			deps.DB = &database
+			searchSvc := searchsvc.NewService(database)
+			deps.Services.SearchService = searchSvc
+
+			svc, err := api.NewService(ctx, opts, deps)
 			if err != nil {
 				return Cancel(err, cancel, svc)
 			}

@@ -12,6 +12,83 @@ servers:
   - url: http://localhost:3000/v1
     description: Local development server
 paths:
+  /videos:
+    get:
+      summary: Get videos
+      operationId: getVideos
+      description: Get videos
+      parameters:
+        - name: page
+          in: query
+          description: page number
+          required: false
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          description: number of videos per page
+          required: false
+          schema:
+            type: integer
+        - name: title
+          in: query
+          description: title of the video
+          required: false
+          schema:
+            type: string
+        - name: description
+          in: query
+          description: description of the video
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetVideosResponse'
+                
 
 components:
   schemas:
+    Video:
+      type: object
+      required:
+        - id
+        - title
+        - description
+        - publishedAt
+        - thumbnail
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        publishedAt:
+          type: string
+          format: date-time
+        thumbnail:
+          type: string
+    GetVideosResponse:
+      type: object
+      required:
+        - videos
+        - page
+        - limit
+        - total
+      properties:
+        videos:
+          type: array
+          items:
+            $ref: '#/components/schemas/Video'
+        page:
+          type: integer
+        limit:
+          type: integer
+        total:
+          type: integer
+          format: int64

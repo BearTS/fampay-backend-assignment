@@ -14,9 +14,8 @@ import (
 
 func RootCmd() *cobra.Command {
 	// Created a separate service to showcase how we can have multiple services running
-	// Another way would be including the same in the main api service and running it inside a go routine
-	// By running this in a separate service, we can have a separate config for this service and also have a separate log file
 	// This also makes sure that if we scale the services, we can scale them independently
+	// Another way would be including the same in the main api service and running it inside a go routine
 	c := &cobra.Command{
 		Use:   "youtube-fetcher",
 		Short: "fetches data from youtube every x seconds",
@@ -37,13 +36,6 @@ func RootCmd() *cobra.Command {
 				}
 				var dbVideos []*db.Videos
 				for _, video := range data {
-					fmt.Println("Title: ", video.Snippet.Title)
-					fmt.Println("Description: ", video.Snippet.Description)
-					fmt.Println("PublishedAt: ", video.Snippet.PublishedAt)
-					fmt.Println("Thumbnail: ", video.Snippet.Thumbnails.Default.Url)
-					fmt.Println("VideoId: ", video.Id.VideoId)
-					fmt.Println()
-
 					var dbVideo db.Videos
 					dbVideo.VideoId = video.Id.VideoId
 					dbVideo.Title = video.Snippet.Title
@@ -53,6 +45,7 @@ func RootCmd() *cobra.Command {
 					timeParsed, _ := time.Parse(time.RFC3339, video.Snippet.PublishedAt)
 					dbVideo.PublishedAt = timeParsed
 
+					// TODO: make sure that duplicate videos are not added
 					dbVideos = append(dbVideos, &dbVideo)
 				}
 

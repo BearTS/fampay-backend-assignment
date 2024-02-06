@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/BearTS/fampay-backend-assignment/api/pkg/routes"
+	"github.com/BearTS/fampay-backend-assignment/pkg/db"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -27,25 +28,35 @@ type Options struct {
 	ShutdownGracePeriod time.Duration
 }
 
-// Service - controller for the service
-type Service struct {
-	ctx    context.Context
-	opts   *Options
-	server EchoServer
+type ApiSvc struct {
+	ctx      context.Context
+	opts     *Options
+	server   EchoServer
+	services Services
+}
+
+type Services struct {
+	SearchService SearchService
+}
+
+type Dependencies struct {
+	DB       *db.DB
+	Services Services
 }
 
 // NewService - constructor for Service
-func NewService(ctx context.Context, opts *Options) (*Service, error) {
-	svc := &Service{
-		ctx:  ctx,
-		opts: opts,
+func NewService(ctx context.Context, opts *Options, deps Dependencies) (*ApiSvc, error) {
+	svc := &ApiSvc{
+		ctx:      ctx,
+		opts:     opts,
+		services: deps.Services,
 	}
 	svc.server = svc.createServer()
 	return svc, nil
 }
 
 // Start starts the API
-func (svc *Service) Start() {
+func (svc *ApiSvc) Start() {
 	go func() {
 		addr := fmt.Sprintf(":%d", svc.opts.Port)
 		if err := svc.server.Start(addr); err != nil {
@@ -55,13 +66,13 @@ func (svc *Service) Start() {
 }
 
 // Close closes the API
-func (svc *Service) Close() (err error) {
+func (svc *ApiSvc) Close() (err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), svc.opts.ShutdownGracePeriod)
 	defer cancel()
 	return svc.server.Shutdown(ctx)
 }
 
-func (svc *Service) createServer() EchoServer {
+func (svc *ApiSvc) createServer() EchoServer {
 	server := echo.New()
 	// Default CORS
 	server.Use(middleware.CORS())
