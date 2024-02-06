@@ -9,6 +9,7 @@ import (
 type Videos struct {
 	gorm.Model
 
+	VideoId      string    `gorm:"column:video_id;uniqueIndex;not null;type:text"`
 	Title        string    `gorm:"column:title;not null;type:text"`
 	Description  string    `gorm:"column:description;type:text"`
 	Thumbnail    string    `gorm:"column:thumbnail;type:text"`
@@ -18,4 +19,8 @@ type Videos struct {
 
 func (Videos) TableName() string {
 	return "videos"
+}
+
+func (db *db) CreateVideosBulk(videos []*Videos) error {
+	return db.gormDB.Create(&videos).Error
 }

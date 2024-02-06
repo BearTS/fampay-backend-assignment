@@ -10,6 +10,7 @@ type ConfigDatabase struct {
 	// Youtube Related Configs
 	YoutubeApiKeys       string `env:"YOUTUBE_API_KEYS"`
 	YoutubeFetchInterval int    `env:"YOUTUBE_FETCH_INTERVAL" env-default:"10"` // seconds
+	YoutubeQuery         string `env:"YOUTUBE_QUERY" env-default:"cricket"`
 
 	// Postgres Related Configs
 	PostgresHost string `env:"POSTGRES_HOST" env-default:"localhost"`

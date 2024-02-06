@@ -2,9 +2,12 @@ package cmd
 
 import (
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/BearTS/fampay-backend-assignment/pkg/config"
+	"github.com/BearTS/fampay-backend-assignment/pkg/db"
+	"github.com/BearTS/fampay-backend-assignment/pkg/youtube"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
@@ -18,11 +21,43 @@ func RootCmd() *cobra.Command {
 		Use:   "youtube-fetcher",
 		Short: "fetches data from youtube every x seconds",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			logrus.Info("youtube-fetcher running")
+			apiKey := strings.Split(config.Config.YoutubeApiKeys, ",")
+			gormDB, _ := db.Connection()
+			database := db.NewDB(gormDB)
+			youtubeSvc := youtube.NewYoutubeClient(apiKey)
+			timeafter := time.Now().AddDate(0, -1, 0)
 
+			// Fetch the data from youtube
 			fetch := func() {
-				// TODO: Fetch data from youtube using the youtube pkg
 				fmt.Println("Fetching data from youtube")
+				data, err := youtubeSvc.SearchByQuery(config.Config.YoutubeQuery, 10, timeafter)
+				if err != nil {
+					logrus.Error("Error fetching data from youtube: ", err)
+					return
+				}
+				var dbVideos []*db.Videos
+				for _, video := range data {
+					fmt.Println("Title: ", video.Snippet.Title)
+					fmt.Println("Description: ", video.Snippet.Description)
+					fmt.Println("PublishedAt: ", video.Snippet.PublishedAt)
+					fmt.Println("Thumbnail: ", video.Snippet.Thumbnails.Default.Url)
+					fmt.Println("VideoId: ", video.Id.VideoId)
+					fmt.Println()
+
+					var dbVideo db.Videos
+					dbVideo.VideoId = video.Id.VideoId
+					dbVideo.Title = video.Snippet.Title
+					dbVideo.Description = video.Snippet.Description
+					dbVideo.Thumbnail = video.Snippet.Thumbnails.Default.Url
+					dbVideo.ChannelTitle = video.Snippet.ChannelTitle
+					timeParsed, _ := time.Parse(time.RFC3339, video.Snippet.PublishedAt)
+					dbVideo.PublishedAt = timeParsed
+
+					dbVideos = append(dbVideos, &dbVideo)
+				}
+
+				// Save the data to the database
+				err = database.CreateVideosBulk(dbVideos)
 			}
 
 			fetch()

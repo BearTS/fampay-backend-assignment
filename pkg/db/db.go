@@ -9,6 +9,9 @@ type db struct {
 type DB interface {
 	BeginTxx() *gorm.DB
 	CommitTxx(tx *gorm.DB) error
+
+	/* --------------------------------- Videos --------------------------------- */
+	CreateVideosBulk(videos []*Videos) error
 }
 
 // NewDB creates a new DB object.

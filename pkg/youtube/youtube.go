@@ -28,7 +28,7 @@ func NewYoutubeClient(apiKey []string) *Youtube {
 
 	client, err := ytApi.NewService(context.Background(), option.WithAPIKey(apiKey[0]))
 	if err != nil {
-		logrus.Fatal("Unable to create a yt client")
+		logrus.Fatal("Unable to create a yt client", err)
 		return nil
 	}
 	return &Youtube{
@@ -40,5 +40,17 @@ func NewYoutubeClient(apiKey []string) *Youtube {
 
 // TODO: Upon a ratelimit error call a function which changes the api key
 func (svc *Youtube) changeApiKey() error {
+	if svc.currentIndexOfApiKey == len(svc.ApiKey)-1 {
+		svc.currentIndexOfApiKey = 0
+	} else {
+		svc.currentIndexOfApiKey++
+	}
+
+	client, err := ytApi.NewService(context.Background(), option.WithAPIKey(svc.ApiKey[svc.currentIndexOfApiKey]))
+	if err != nil {
+		logrus.Error("Unable to create a yt client", err)
+		return err
+	}
+	svc.youtubeClient = client
 	return nil
 }
