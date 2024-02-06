@@ -1,0 +1,6 @@
+# oapi-codegen config
+package: routes
+generate:
+  models: true
+  echo-server: true
+output: routes.gen.go

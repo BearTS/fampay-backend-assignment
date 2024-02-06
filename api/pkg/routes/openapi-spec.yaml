@@ -1,0 +1,17 @@
+openapi: 3.0.0
+info:
+  title: Fampay Backend assignment API
+  description: basic search API to search the stored videos using their title and description.
+  termsOfService: TODO 
+  version:  1.0.0
+  contact:
+    name: Anuj Parihar
+    url: https://github.com/BearTS
+    email: anujpflash@gmail.com
+servers:
+  - url: http://localhost:3000/v1
+    description: Local development server
+paths:
+
+components:
+  schemas:

@@ -1,0 +1,12 @@
+version: '3'
+
+tasks:
+  gen:
+    dir: ./api/pkg/routes/
+    cmds:
+      - go run github.com/deepmap/oapi-codegen/cmd/oapi-codegen --config=oapi-codegen.yaml ./openapi-spec.yaml
+  api:
+    cmds:
+      - go run main.go api
+    env:
+      PORT: 4000
