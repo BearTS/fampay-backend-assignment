@@ -4,12 +4,19 @@ package config
 import "github.com/ilyakaznacheev/cleanenv"
 
 type ConfigDatabase struct {
-	Port int `env:"PORT" env-default:"3000"`
+	Environment string `env:"ENVIRONMENT" env-default:"development"`
+	Port        int    `env:"PORT" env-default:"3000"`
 
 	// Youtube Related Configs
 	YoutubeApiKeys       string `env:"YOUTUBE_API_KEYS"`
 	YoutubeFetchInterval int    `env:"YOUTUBE_FETCH_INTERVAL" env-default:"10"` // seconds
 
+	// Postgres Related Configs
+	PostgresHost string `env:"POSTGRES_HOST" env-default:"localhost"`
+	PostgresPort int    `env:"POSTGRES_PORT" env-default:"5432"`
+	PostgresUser string `env:"POSTGRES_USER" env-default:"postgres"`
+	PostgresPass string `env:"POSTGRES_PASS" env-default:"postgres"`
+	PostgresDb   string `env:"POSTGRES_DB" env-default:"fampay"`
 }
 
 // TODO: Revisit this to make it follow singleton pattern

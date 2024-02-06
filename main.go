@@ -1,8 +1,6 @@
 package main
 
-import (
-	"github.com/BearTS/fampay-backend-assignment/cmd"
-)
+import "github.com/BearTS/fampay-backend-assignment/cmd"
 
 func main() {
 	cmd.Execute()
