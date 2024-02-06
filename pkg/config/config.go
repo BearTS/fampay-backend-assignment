@@ -1,7 +1,12 @@
 // Package to keep track and handle configurations
 package config
 
-import "github.com/ilyakaznacheev/cleanenv"
+import (
+	"fmt"
+	"os"
+
+	"github.com/ilyakaznacheev/cleanenv"
+)
 
 type ConfigDatabase struct {
 	Environment string `env:"ENVIRONMENT" env-default:"development"`
@@ -20,11 +25,25 @@ type ConfigDatabase struct {
 	PostgresDb   string `env:"POSTGRES_DB" env-default:"fampay"`
 }
 
-// TODO: Revisit this to make it follow singleton pattern
 var Config ConfigDatabase
 
 func ReadFromEnv() ConfigDatabase {
-	err := cleanenv.ReadEnv(&Config)
+	file, err := os.OpenFile(".env", os.O_RDONLY|os.O_SYNC, 0)
+	if err != nil {
+		if os.IsNotExist(err) {
+			fmt.Println("No .env file found, reading from environment")
+			err = cleanenv.ReadEnv(&Config)
+			if err != nil {
+				panic(err)
+			}
+			return Config
+		}
+		panic(err)
+	}
+
+	defer file.Close()
+
+	err = cleanenv.ReadConfig(".env", &Config)
 	if err != nil {
 		panic(err)
 	}

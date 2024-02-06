@@ -21,10 +21,9 @@ import (
 )
 
 func RootCmd() *cobra.Command {
-	configuration := config.ReadFromEnv()
 	opts := &api.Options{
 		Path:                "/v1",
-		Port:                configuration.Port,
+		Port:                config.Config.Port,
 		ShutdownGracePeriod: 5 * time.Second,
 	}
 
