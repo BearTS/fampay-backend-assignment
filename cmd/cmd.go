@@ -5,6 +5,7 @@ import (
 	"os"
 
 	api "github.com/BearTS/fampay-backend-assignment/api/cmd"
+	youtubeFetcher "github.com/BearTS/fampay-backend-assignment/youtube_fetcher/cmd"
 
 	"github.com/spf13/cobra"
 )
@@ -20,6 +21,7 @@ var cmd = &cobra.Command{
 // Execute - starts the CLI
 func init() {
 	cmd.AddCommand(api.RootCmd())
+	cmd.AddCommand(youtubeFetcher.RootCmd())
 }
 
 func Execute() {
