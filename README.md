@@ -75,10 +75,11 @@ You can get the API documentation in the OpenAPI format from this [link](/api/pk
 You can directly import this file to Postman or Swagger to get the API documentation.
 
 ## Explanation
-The application is divided into 3 separate services:
+The application is divided into 2 separate services:
 1. [API](#api)
 2. [Youtube Fetcher](#youtube-fetcher)
-3. [DbApp](#dbapp)
+   
+We use our own command line tool, [DbApp](#dbapp) to handle one-time database operations.
 
 #### Database
 We are using PostgreSQL as the database. The database is used to store the videos fetched from Youtube. The database is managed using the [GORM](https://gorm.io/) library. The database schema is defined in the `pkg/db` directory. The database schema is defined using the GORM tags.
@@ -123,7 +124,8 @@ go run main.go youtube-fetcher
 ```
 
 ### DbApp
-The DbApp is responsible for handling the database migrations and other database operations.
+The DbApp is a command line tool that is responsible for handling one-time database operations. The DbApp is built using the [Go](https://golang.org/) programming language.
+This is **not a service**, but a command line tool.
 
 The service can be run using the following command:
 ```bash

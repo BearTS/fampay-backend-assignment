@@ -1,0 +1,36 @@
+name: build
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Github Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - run: git fetch --force --tags
+      - run: git config --global url.https://${{ secrets.REPO_BUILDER_TOKEN }}@github.com/.insteadOf https://github.com/
+      - uses: actions/setup-go@v3
+        with:
+          go-version: '>=1.21'
+          cache: true
+      - uses: goreleaser/goreleaser-action@v4
+        with:
+          version: latest
+          args: release --skip-publish --snapshot --clean
+        env:
+          GITHUB_TOKEN: ${{ secrets.REPO_BUILDER_TOKEN }}
+      - name: Install packages
+        id: install
+        run: go install ./...
+      - name: Run tests
+        id: test
+        run: go test -v ./...
+      - name: Build 
+        id: build
+        run: go build -o fampay-backend-assignment
+      - name: Run
+        id: run
+        run: ./fampay-backend-assignment

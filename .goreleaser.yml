@@ -1,0 +1,43 @@
+project_name: fampay-backend-assignment
+before:
+  hooks:
+    - go mod tidy
+builds:
+  - goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s -w -X main.version={{ .Version }} -X main.commit={{ .Commit }} -X main.date={{ .CommitDate }} -X main.branch={{ .Branch }}
+    mod_timestamp: "{{ .CommitTimestamp }}"
+release:
+  prerelease: auto
+universal_binaries:
+  - replace: true
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+      - '^ci:'
+archives:
+  - files:
+      - none*
+    format_overrides:
+      - goos: windows
+        format: zip
+# For Linux packages, we use nfpm <github.com/goreleaser/nfpm> to build packages for various distributions.
+nfpms:
+  - package_name: fampay-backend-assignment
+    vendor: BearTS
+    maintainer: Anuj Parihar <anujpflash@gmail.com>
+    description: A simple backend service to fetch youtube videos based on search query.
+    formats:
+      - apk
+      - deb
+      - rpm
+      - archlinux
