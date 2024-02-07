@@ -30,7 +30,7 @@ func RootCmd() *cobra.Command {
 			// Fetch the data from youtube
 			fetch := func() {
 				fmt.Println("Fetching data from youtube")
-				data, err := youtubeSvc.SearchByQuery(config.Config.YoutubeQuery, 10, timeafter)
+				data, err := youtubeSvc.SearchByQuery(config.Config.YoutubeQuery, 50, timeafter)
 				if err != nil {
 					logrus.Error("Error fetching data from youtube: ", err)
 					return
