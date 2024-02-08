@@ -17,7 +17,7 @@ jobs:
         with:
           github_token: ${{ secrets.REPO_BUILDER_TOKEN }}
           release_branches: main
-          pre_release_branches: release-1
+          pre_release_branches: dev
           append_to_pre_release_tag: rc
   release:
     needs: tagger

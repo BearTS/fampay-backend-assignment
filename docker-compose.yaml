@@ -74,7 +74,7 @@ services:
       - youtube-fetcher
     environment:
       - ENVIRONMENT=local
-      - YOUTUBE_API_KEYS=apiKey1,apiKey2
+      - YOUTUBE_API_KEYS=AIzaSyAASC_R8L_md0L6XwbEYL8F32K8kPGoZ24,apiKey2
       - YOUTUBE_FETCH_INTERVAL=10
       - YOUTUBE_QUERY=cricket
       - POSTGRES_HOST=psql
