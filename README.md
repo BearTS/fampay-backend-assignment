@@ -8,6 +8,7 @@ This is a backend assignment for Fampay. The assignment is to create a REST API 
     - [Prerequisites](#prerequisites)
     - [Linux/MacOS](#linuxmacos)
     - [Docker](#docker)
+      - [Troubleshooting](#troubleshooting)
   - [API Documentation](#api-documentation)
   - [Explanation](#explanation)
       - [Database](#database)
@@ -60,14 +61,38 @@ cd fb_assignment
 2. Fill the appropriate values in the environment variables in docker-compose
 For `YOUTUBE_API_KEYS`, you can add multiple keys separated by a comma. The application will switch to the next key if the quota for the current key is exhausted.
 
-3. Build and run the application
+3.. Run the postgres container
+```bash
+docker-compose up -d psql
+```
+
+4. Run the following command to run the application
 ```bash
 docker-compose up -d
 ```
 
-4. The application should be running on `http://localhost:3000` by default.
+
+The application should be running on `http://localhost:3000` by default.
 
 Note: The setup is used for local or development purposes. For production, the environment variables should be set in a more secure way and additional measures should be taken.
+
+#### Troubleshooting
+
+In case you get the following error:
+```bash
+[error] failed to initialize database, got error failed to connect to
+```
+
+It could be because the database is not ready yet. You can run the following command to check the logs of the database container:
+```bash
+docker-compose logs -f psql
+```
+
+You can check the logs to see if the database is ready. If the database is ready, you can run the following command to run the application:
+```bash
+docker-compose up -d migrate
+```
+The above should resolve the issue. If the issue still persists, kindly check the environment variables.
 
 ## API Documentation
 <!-- api/pkg/routes/openapi-spec.yaml -->
